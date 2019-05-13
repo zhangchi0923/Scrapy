@@ -40,11 +40,31 @@ URL是通过HTTP协议存取资源的Internet路径，一个URL对应一个数�
 	</tr>
 </table>
 
-##### Get与Post
 
 Get和Post是HTTP最常用的两种方法（除此之外还有HEAD,PUT,DELETE等）
 - Get：从指定的资源请求数据
-- Post：向指定的资源提交要处理的数据
+- Post：向指定的资源提交要处理的数据；如果提交字典就存储在form（表单）下、如果提交字符串就存储在data下  
+  
+requests库核心方法：  
+```
+requests.request(method,url,**kwargs)
+```
+- method:对应GET、HEAD、PUT等方法  
+- url：对应URL链接  
+- \**kwargs:控制访问的参数，可选项  
+  - params:字典或字节序列，作为参数增加到url中
+  ```
+  kv = {'key1' = 'value1', 'key2' = 'value2'}
+  r = requests.request('GET','http://www.douban.com/login', params = kv)
+  # http://www.douban.com/login?key1=value1&key2=value2
+  ```
+  - data:字典、字节序列或文件对象，作为Request对象的内容
+  ```
+  kv = {'key1' = 'value1', 'key2' = 'value2'}
+  r = requests.request('POST','http://www.douban.com/login',data = kv)
+  ```
+  - json：JSON数据格式，作为Request内容
+	  
 
 ```
 import requests
@@ -135,7 +155,7 @@ Get与Post方法对比
     					Information 		如果中间节点上有一份资源副本，但无法或者没有对它所发送的与资源有关的
     										元信息进行验证，就会出现这种情况
 
-    	204				No 	Content         响应报文中包含若干首部和一个状态行，但没有实体的主体部分。主要用于在
+    	204				No Content         	响应报文中包含若干首部和一个状态行，但没有实体的主体部分。主要用于在
     								浏览器不转为显示新文档的情况下，对其进行更新（比如刷新一个表单页面）
 
     	205				Reset Content 		另一个主要用于浏览器的代码。负责告知浏览器清除当前页面中的所有HTML
@@ -203,7 +223,7 @@ Get与Post方法对比
 
    	409      			Conflict            	请求会造成服务器冲突
 
-   	410  	            Gone   				跟404一样，只不过服务器曾经拥有过该请求资源
+   	410  	            		Gone   			跟404一样，只不过服务器曾经拥有过该请求资源
 
    	411 				Length Required    	要求客户端发送Content-Length首部
 
@@ -218,7 +238,7 @@ Get与Post方法对比
    	416 				Requested Range Not    	请求报文所请求的是指定资源的某个范围，而此范围无效或无法满足时
    						Satisfiable  	，使用此状态码
 
-   	417				Expectation Failed 		请求中包含Expect首部，服务器无法满足
+   	417				Expectation Failed 	请求中包含Expect首部，服务器无法满足
 
    	500				Internal Server Error  	服务器错误
 
