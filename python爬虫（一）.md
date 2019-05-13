@@ -1,7 +1,44 @@
 ﻿## python网络爬虫（一）
 #### 1.get与post请求
 ##### 关于HTTP
-超文本传输协议（HTTP）目的是保证客户端与服务器端的通信，其作用就是实现客户端与服务器的请求-应答。
+HTTP，Hypertext Transfer Protocol，超文本传输协议。
+HTTP是一个基于“请求与响应”模式的、无状态（前后两次请求无关联）的应用层协议，目的是保证客户端与服务器端的通信，其作用就是实现客户端与服务器的请求-应答。
+HTTP协议采用URL作为定位网络资源的标识。
+
+URL格式：http://host[:port][path]
+e.g.    http://www.douban.com:80/login
+URL是通过HTTP协议存取资源的Internet路径，一个URL对应一个数据资源。
+<table>
+<h4>HTTP协议对资源的操作（对应requests库中常用方法）</h4>
+	<tr>
+		<th>方法</th>
+		<th>说明</th>
+	</tr>
+	<tr>
+		<td>GET</td>
+		<td>请求获取URL位置的资源</td>
+	</tr>
+	<tr>
+		<td>HEAD</td>
+		<td>请求获取URL位置资源的头部信息</td>
+	</tr>
+	<tr>
+		<td>POST</td>
+		<td>请求获取URL位置的资源后附加新的数据</td>
+	</tr>
+	<tr>
+		<td>PUT</td>
+		<td>请求获取URL位置存储一个资源，覆盖URL位置的资源</td>
+	</tr>
+	<tr>
+		<td>PATCH</td>
+		<td>请求局部更新URL位置的资源，即改变该处资源的部分内容</td>
+	</tr>
+	<tr>
+		<td>DELETE</td>
+		<td>请求删除URL位置的资源</td>
+	</tr>
+</table>
 ##### Get与Post
 Get和Post是HTTP最常用的两种方法（除此之外还有HEAD,PUT,DELETE等）
 - Get：从指定的资源请求数据
@@ -32,6 +69,7 @@ formdata = {'form_email':'1099327299@qq.com','form_password':'password'}
 response = requests.post('http://www.douban.com/login',formdata)
 
 ```
+Get与Post方法对比
 <table>
 	<tr>
 		<th></th>
@@ -39,29 +77,34 @@ response = requests.post('http://www.douban.com/login',formdata)
 		<th>Post</th>
 	</tr>
 	<tr>
-		<th>书签</th>
-		<th>可收藏为书签</th>
-		<th>不可收藏为书签</th>
+		<td>书签</td>
+		<td>可收藏为书签</td>
+		<td>不可收藏为书签</td>
 	</tr>
 	<tr>
-		<th>缓存</th>
-		<th>能被缓存</th>
-		<th>不能被缓存</th>
+		<td>缓存</td>
+		<td>能被缓存</td>
+		<td>不能被缓存</td>
 	</tr>
 	<tr>
-		<th>历史记录</th>
-		<th>参数会保留在浏览器历史记录中</th>
-		<th>参数不会保留在浏览器历史记录中</th>
+		<td>历史记录</td>
+		<td>参数会保留在浏览器历史记录中</td>
+		<td>参数不会保留在浏览器历史记录中</td>
 	</tr>
 	<tr>
-		<th>数据长度限制</th>
-		<th>有限制。URL最大长度为2048个字符</th>
-		<th>无限制，且允许二进制</th>
+		<td>数据长度限制</td>
+		<td>有限制。URL最大长度为2048个字符</td>
+		<td>无限制，且允许二进制</td>
 	</tr>
 	<tr>
-		<th>安全性</th>
-		<th>相比于post较差，因为发送的数据是url的一部分</th>
-		<th>比较安全</th>
+		<td>安全性</td>
+		<td>相比于post较差，因为发送的数据是url的一部分</td>
+		<td>比较安全</td>
+	</tr>
+	<tr>
+		<td>可见性</td>
+		<td>数据在url中对所有人可见</td>
+		<td>数据不显示在url中</td>
 	</tr>
 </table>
 
@@ -144,7 +187,7 @@ response = requests.post('http://www.douban.com/login',formdata)
 
    	402         			Payment Required    	此状态码未使用，保留
 
-   	403                	 F	orbidden           	服务器拒绝请求，可在响应主体中告知原因
+   	403                	 	Forbidden           	服务器拒绝请求，可在响应主体中告知原因
 
    	404  				Not Found           	用于告知客户端请求的资源在服务器不存在
 
@@ -196,6 +239,38 @@ response = requests.post('http://www.douban.com/login',formdata)
 ```
 ##### 通用代码框架
 ###### 异常解决
+常见Requests库的异常
+<table>
+	<tr>
+		<th>异常</th>
+		<th>说明</th>
+	</tr>
+	<tr>
+		<td>requests.ConnectionError</td>
+		<td>网络连接错误，DNS查询失败，拒绝链接等</td>
+	</tr>
+	<tr>
+		<td>requests.HTTPError</td>
+		<td>HTTP错误异常</td>
+	</tr>
+	<tr>
+		<td>requests.URLRequired</td>
+		<td>URL缺失异常</td>
+	</tr>
+	<tr>
+		<td>requests.TooManyRedirects</td>
+		<td>超过最大重定向次数，产生重定向异常</td>
+	</tr>
+	<tr>
+		<td>requests.ConnectTimeout</td>
+		<td>连接远程服务器超时异常</td>
+	</tr>
+	<tr>
+		<td>requests.Timeout</td>
+		<td>请求URL超市异常</td>
+	</tr>
+	
+</table>
 
 #### 2.正则表达式
 正则表达式是用特定的表达式来匹配检索出的内容从而得到我们想要的信息
