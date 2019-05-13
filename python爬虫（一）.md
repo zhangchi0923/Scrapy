@@ -1,12 +1,12 @@
 ﻿## python网络爬虫（一）
 #### 1.get与post请求
 ##### 关于HTTP
-HTTP，Hypertext Transfer Protocol，超文本传输协议。\n
-HTTP是一个基于“请求与响应”模式的、无状态（前后两次请求无关联）的应用层协议，目的是保证客户端与服务器端的通信，其作用就是实现客户端与服务器的请求-应答。
-HTTP协议采用URL作为定位网络资源的标识。
+HTTP，Hypertext Transfer Protocol，超文本传输协议。  
+HTTP是一个基于“请求与响应”模式的、无状态（前后两次请求无关联）的应用层协议，目的是保证客户端与服务器端的通信，其作用就是实现客户端与服务器的请求-应答。  
+HTTP协议采用URL作为定位网络资源的标识。  
 
-URL格式：http://host[:port][path]
-e.g.    http://www.douban.com:80/login
+URL格式：http://host[:port][path]  
+e.g.    http://www.douban.com:80/login  
 URL是通过HTTP协议存取资源的Internet路径，一个URL对应一个数据资源。
 <table>
 <h4>HTTP协议对资源的操作（对应requests库中常用方法）</h4>
