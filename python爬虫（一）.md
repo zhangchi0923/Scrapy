@@ -16,27 +16,55 @@ import requests
 
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64) '
             'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36'}
-try:
-    #requests.get()构造了一个Request对象向服务器发送请求，该函数返回一个Response对象，包含从服务器获取的全部内容
-    response = requests.get("http://www.baidu.com/",headers = headers)
-except requests.HTTPError as e:
-    # print(response.text)
-     print(response.status_code)	#打印状态码
 
+#requests.get()构造了一个Request对象向服务器发送请求，该函数返回一个Response对象，包含从服务器获取的全部内容
+r = requests.get("http://www.baidu.com/",headers = headers)
+
+r.status_code		# HTTP请求的返回状态；只要返回的不是200，就失败了
+r.text			# HTTP响应内容的字符串形式，即URL对应的内容
+r.encoding		# 从HTTP header中猜测的响应内容编码方式；若header中没有charset，默认ISO-8859-1(不能解析中文)
+r.apparent_encoding	# 从内容中**分析**出的响应内容编码方式
+r.content		# HTTP响应内容的二进制形式
+
+# print(response.text)
 #post请求，向http://www.douban.com/login发送登录信息
 formdata = {'form_email':'1099327299@qq.com','form_password':'password'}
 response = requests.post('http://www.douban.com/login',formdata)
 
 ```
-get与post请求的区别
-|  | get | post |
-|--|--|--|
-| 书签 | 可收藏为书签 | 不可收藏为书签 |
-| 缓存 | 能被缓存 | 不能被缓存 |
-| 历史 | 参数会保留在浏览器历史记录中 | 参数不会保留在浏览器历史记录中 |
-|数据长度限制  | 有限制。URL最大长度为2048个字符 | 无限制，且允许二进制 |
-| 安全性 | 相比于post较差，因为发送的数据是url的一部分 | 比较安全 |
-| 可见行 | 数据在url中对所有人可见 | 数据不显示在url中 |
+<table>
+	<tr>
+		<th></th>
+		<th>Get</th>
+		<th>Post</th>
+	</tr>
+	<tr>
+		<th>书签</th>
+		<th>可收藏为书签</th>
+		<th>不可收藏为书签</th>
+	</tr>
+	<tr>
+		<th>缓存</th>
+		<th>能被缓存</th>
+		<th>不能被缓存</th>
+	</tr>
+	<tr>
+		<th>历史记录</th>
+		<th>参数会保留在浏览器历史记录中</th>
+		<th>参数不会保留在浏览器历史记录中</th>
+	</tr>
+	<tr>
+		<th>数据长度限制</th>
+		<th>有限制。URL最大长度为2048个字符</th>
+		<th>无限制，且允许二进制</th>
+	</tr>
+	<tr>
+		<th>安全性</th>
+		<th>相比于post较差，因为发送的数据是url的一部分</th>
+		<th>比较安全</th>
+	</tr>
+</table>
+
 
 不同状态码代表含义
 ```
@@ -59,17 +87,17 @@ get与post请求的区别
 								分包含对请求状态的描述，或许还应该有对请求完成时间的估计（或者包含一个指
 								针，指向可以获取此信息的位置）
 
-    203 				Non-Authoritative           实体首部包含的信息不是来自原远端服务器，而是来自于资源的一份副本。 
+    	203 				Non-Authoritative           实体首部包含的信息不是来自原远端服务器，而是来自于资源的一份副本。 
     					Information 		如果中间节点上有一份资源副本，但无法或者没有对它所发送的与资源有关的
     										元信息进行验证，就会出现这种情况
 
-    204					No 	Content         响应报文中包含若干首部和一个状态行，但没有实体的主体部分。主要用于在
+    	204				No 	Content         响应报文中包含若干首部和一个状态行，但没有实体的主体部分。主要用于在
     								浏览器不转为显示新文档的情况下，对其进行更新（比如刷新一个表单页面）
 
-    205					Reset Content 		另一个主要用于浏览器的代码。负责告知浏览器清除当前页面中的所有HTML
+    	205				Reset Content 		另一个主要用于浏览器的代码。负责告知浏览器清除当前页面中的所有HTML
     										表单元素
 
-    206					Partial Content 	成功执行了一个部分或Range(范围)请求。稍后我们会看到，客户端可以通过
+    	206				Partial Content 	成功执行了一个部分或Range(范围)请求。稍后我们会看到，客户端可以通过
     							一些特殊的首部来获取部分或某个范围内的文档————这个状态码就说明范围请求成功了。
 
 
@@ -85,23 +113,23 @@ get与post请求的区别
 
 
 
-    300					Multiple Choices 	客户端请求一个实际指向多个资源的URL时会返回这个状态码，比如服务器
+    	300				Multiple Choices 	客户端请求一个实际指向多个资源的URL时会返回这个状态码，比如服务器
     										上有某个HTML文档的英语和法语版本。返回这个代码时会带有一个选项列表；这样用户就可以选择它希望使用的那一项了。有多个版本可用时，客户端需要沟通解决。
 
-    301					Moved Permanently	在请求的URL已被移除时使用。响应的Location首部中应该包含资源现在所处
+    	301				Moved Permanently	在请求的URL已被移除时使用。响应的Location首部中应该包含资源现在所处
     										的URL
 
-    302 				Found 			与301状态码类似，但是，客户端应该使用Location首部给出的URL来临时定位
+    	302 				Found 			与301状态码类似，但是，客户端应该使用Location首部给出的URL来临时定位
     										资源。将来的请求仍应该使用老的URL
 
-    303 				See Other 		告知客户端应该用另一个URL来获取资源。新的URL位于响应报文的Location
+    	303 				See Other 		告知客户端应该用另一个URL来获取资源。新的URL位于响应报文的Location
     								首部。其主要母的是允许POST请求的响应将客户端定向到某个资源上去
 
-    304  				Not Modified 		客户端可以通过所包含的请求首部，使其请求变成有条件的。如果客户端发起
+    	304  				Not Modified 		客户端可以通过所包含的请求首部，使其请求变成有条件的。如果客户端发起
     								了一个条件GET请求，而最近资源未被修改的话，就可以用这个状态码来说明
     								资源未被修改。带有这个状态码的响应不应该包含实体的主体部分。
 
-    305 				Use Proxy  		用来说明必须通过一个代理访问资源；代理的位置由Location首部给出。很
+    	305 				Use Proxy  		用来说明必须通过一个代理访问资源；代理的位置由Location首部给出。很
     								重要的一点是，客户端是相对某个特定资源来解析这条响应的，不能假定所有请求。
 								甚至所有对持有请求资源的服务器的请求都通过这个代理进行。如果客户端错误地让
 								代理介入了某条请求，可能会引发破坏性的行为，而且会造成安全漏洞。
@@ -161,11 +189,13 @@ get与post请求的区别
    	504 				Gateway Timeout 	与状态码408类似，只是这里的响应来自一个网关或代理，它们在等待另
    												一服务器对其请求进行响应时超时了
 
-    505 				HTTP Version Not        服务器收到的请求使用了它无法或不愿支持的协议版本时，使用此
+    	505 				HTTP Version Not        服务器收到的请求使用了它无法或不愿支持的协议版本时，使用此
     					Supported 				状态码。有些服务器应用程序会选择不支持协议的早起版本	
 
 
 ```
+##### 通用代码框架
+###### 异常解决
 
 #### 2.正则表达式
 正则表达式是用特定的表达式来匹配检索出的内容从而得到我们想要的信息
