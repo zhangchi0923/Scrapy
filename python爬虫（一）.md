@@ -298,7 +298,17 @@ Get与Post方法对比
 	</tr>
 	
 </table>
-
+###### 通用代码框架:
+```
+def getHTMLText(url):
+    try:
+        r = requests.get(url,timeout=30)
+        r.raise_for_status()            #如果状态不是200，则引发HTTPError异常
+        r.encoding = r.apparent_encoding
+        return r.text
+    except:
+        return "Exception!"
+```
 #### 2.正则表达式
 正则表达式是用特定的表达式来匹配检索出的内容从而得到我们想要的信息
 
