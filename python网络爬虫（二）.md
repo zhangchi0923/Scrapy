@@ -160,7 +160,8 @@ Xpath是一门在在XML文件中查找信息的语言，我们也可以用来对
     <td>选取属于bookstore元素的所有price元素大于35.00的book元素中的title元素</td>
   </tr>
 </table>
-利用Xpath筛选评论信息代码
+Xpath筛选出评论信息代码：  
+
 ```
 import requests
 from lxml import etree
@@ -195,5 +196,5 @@ if __name__ == "__main__":
     html = getHTML(url,hd)
     getInfo(html)
 ```
-爬取结果
+爬取结果  
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/2019051317210951.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2RydW5rd2hpc2t5,size_16,color_FFFFFF,t_70)
