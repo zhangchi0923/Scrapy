@@ -43,7 +43,7 @@ tag['class']
 print(tag.get('class'))
 # None
 ```
-使用bs爬取丁香园社区http://www.dxy.cn/bbs/thread/626626#626626某一板块下的信息（用户ID，评论时间，评论内容）
+使用bs爬取丁香园社区http://www.dxy.cn/bbs/thread/626626#626626 板块下的信息（用户ID，评论时间，评论内容）
 
 ```
 # -*- coding: UTF-8 -*-
