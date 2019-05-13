@@ -1,4 +1,4 @@
-﻿## python网络爬虫（一）
+﻿## python爬虫（一）
 #### 1.get与post请求
 ##### 关于HTTP
 HTTP，Hypertext Transfer Protocol，超文本传输协议。  
