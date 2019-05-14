@@ -6,26 +6,33 @@ Beautiful Soup 是一个可以从HTML和XML文件中提取数据的python库，�
 
 bs有几种解析器，按照不同的需求选择使用：
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20190512171408280.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2RydW5rd2hpc2t5,size_16,color_FFFFFF,t_70)
+
+我们可以把BeautifulSoup类当作对应html或xml文档的全部内容。
+
 ###### Tag对象
+
 bs中有几种对象，本次任务主要用到了Tag对象。Tag有两个最重要的属性：name和attribute
-*name属性*
+
+- name属性
+
 ```
 tag.name
-tag.name = "blockquot"
+tag.name = "blockquot"	# <blockquot>...</blockquot>
 ```
-*attribute属性*
-一个tag可能有很多个属性. `tag <b class="boldest">` 有一个 “class” 的属性,值为 “boldest” . tag的属性的操作方法与字典相同
+- attribute属性
+  	一个tag可能有很多个属性. `tag <b class="boldest">` 有一个 “class” 的属性,值为 “boldest” . tag的属性的操作方法与字典相同
+
 ```
 tag[‘class']
 # u'boldest'
 ```
-也可以用“点”来访问attribute属性
+​		也可以用“点”来访问attribute属性（键值对）
 
 ```
 tag.attr
 # {u'class': u'boldest'}
 ```
-修改与删除
+​		修改与删除
 
 ```
 tag['class'] = 'verybold'
@@ -43,9 +50,180 @@ tag['class']
 print(tag.get('class'))
 # None
 ```
+- NavigaleString
+
+  标签内非属性字符串
+
+```python
+tag.string	# <>...</>中字符串
+```
+
+###### BeautifulSoup遍历HTML文件标签树
+
+- 上行遍历
+
+<table>
+  <tr>
+    <th>属性</th>
+    <th>说明</th>
+  </tr>
+  <tr>
+    <td>.parent</td>
+    <td>节点的父亲标签</td>
+  </tr>
+  <tr>
+    <td>.parents</td>
+    <td>用于遍历循环先辈节点</td>
+  </tr>
+</table>
+
+```python
+soup = BeautifulSoup(demo,"html.parser")
+for parent in soup.parents:
+	if parent is None:
+		print(parent)
+	else:
+		print(parent.name)
+```
+
+- 平行遍历（必须发生在同一个父亲节点下）
+
+<table>
+  <tr>
+    <th>属性</th>
+    <th>说明</th>
+  </tr>
+  <tr>
+    <td>.next_sibling</td>
+    <td>返回按照HTML文本顺序的下一个平行节点标签</td>
+  </tr>
+  <tr>
+    <td>.previous_sibling</td>
+    <td>返回按照HTML文本顺序的上一个平行节点标签</td>
+  </tr>
+  <tr>
+    <td>.next_siblings</td>
+    <td>迭代类型，返回按照HTML文本顺序的所有后续平行节点标签</td>
+  </tr>
+  <tr>
+    <td>.previous_sibling</td>
+    <td>迭代类型，返回按照HTML文本顺序的所有前面平行节点标签</td>
+  </tr>
+</table>
+
+```python
+soup = BeautifulSoup(demo,"html.parser")
+# 平行遍历后续节点
+for next_sibling in soup.next_siblings:
+	print(next_sibling)
+	
+# 平行遍历前续节点
+for previous_sibling in soup.previous_siblings:
+	print(previous-sibling)
+```
+
+- 下行遍历
+
+<table>
+  <tr>
+    <th>属性</th>
+    <th>说明</th>
+  </tr>
+  <tr>
+    <td>.contents</td>
+    <td>子节点列表，将所有儿子节点存入列表</td>
+  </tr>
+  <tr>
+    <td>.children</td>
+    <td>子节点迭代类型，用于遍历儿子节点</td>
+  </tr>
+  <tr>
+    <td>.descendants</td>
+    <td>子孙节点迭代类型，包含所有子孙节点，用于遍历循环</td>
+  </tr>
+</table>
+
+```python
+# 下行遍历所有儿子节点
+for child in soup.children:
+	print(child)
+	
+# 下行遍历所有子孙节点
+for descendant in soup.descendants:
+	print(descendant)
+```
+
+###### 信息标记的三种形式
+
+标记后的信息具有了信息结构，增加了信息维度，从而可用于通信也便于理解。信息的结构与信息具备着同样的价值。
+
+- XML (extensible markup language)
+
+  ```xml
+  <img src="demo.jpg" size="10"/>
+  <!--This is a comment-->
+  ```
+
+- JSON (JavaScript Obeject Notation)
+
+  有数据类型的键值对
+
+  ```json
+  "key":"value"
+  "key":["value1","value2"]
+  "key":{"subkey":"subvalue"}
+  ```
+
+- YAML (YAML Ain't Markup Language)
+
+  无数据类型的键值对
+
+  ```yaml
+  key:value
+  key:#Comment
+  -value1			# "-"表示并列的值
+  -value2
+  key:				# 键值对之间可嵌套
+  	subkey:subvalue
+  ```
+
+###### 信息提取方法
+
+- 完整解析信息标记形式，再提取关键信息（例如用bs4库的标签遍历树）。信息解析准确，过程繁琐，慢。
+- 无视标记形式，直接搜索关键信息，*文本查找函数*即可。简洁、速度快，但准确性与信息本身有关。
+- 融合方法，既能解析又能查找。
+
+实例：
+
+提取HTML中所有URL链接
+
+思路：
+
+（1）搜索所有<a>标签
+
+（2）解析<a>标签格式，提取href后的链接内容
+
+```python
+<>.find_all(name, attrs, recursive, string, **kwargs)
+# <tag>(..)等价于<tag>.find_all(..)
+# soup(..)等价于soup.find_all(..)
+# find_all()方法的变种：
+find_parents()
+find_next_siblings
+...
+```
+
+name：对某个标签名称的检索字符串
+
+attrs：对某个标签属性的检索字符串
+
+recursive：是否对全部子孙检索，默认true
+
+string：<>…</>中字符串区域的检索字符串
+
 使用bs爬取丁香园社区http://www.dxy.cn/bbs/thread/626626#626626 板块下的信息（用户ID，评论时间，评论内容）
 
-```
+```python
 # -*- coding: UTF-8 -*-
 from bs4 import BeautifulSoup as bs
 import urllib.request
@@ -162,7 +340,7 @@ Xpath是一门在在XML文件中查找信息的语言，我们也可以用来对
 </table>
 Xpath筛选出评论信息代码：  
 
-```
+```python
 import requests
 from lxml import etree
 
