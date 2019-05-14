@@ -76,7 +76,7 @@ if __name__ == "__main__":
     Login().login(username,password)
 ```
 
-<p><img src="/163登陆成功.png" alt="好像暂时显示不出来..."/></p>
+<p><img src="/163登陆成功.png" alt="好像暂时显示不出来..." width="304" height="228"/></p>
 
 也可基于上述代码实现在百度首页检索关键字以及在首页点击进入"视频板块"并检索关键字：
 
@@ -118,4 +118,4 @@ if __name__ == "__main__":
     KeyWordSearch(url).searchResults(kw)
 ```
 
-<p><img src="/搜索奥巴梅扬视频.png" alt="好像暂时显示不出来..."/></p>
+<p><img src="/搜索奥巴梅扬视频.png" alt="好像暂时显示不出来..." width="304" height="228"/></p>
